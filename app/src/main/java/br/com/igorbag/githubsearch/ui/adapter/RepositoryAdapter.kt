@@ -3,6 +3,9 @@ package br.com.igorbag.githubsearch.ui.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import br.com.igorbag.githubsearch.R
 import br.com.igorbag.githubsearch.domain.Repository
@@ -42,14 +45,16 @@ class RepositoryAdapter(private val repositories: List<Repository>) :
     override fun getItemCount(): Int = 0
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        //@TODO 10 - Implementar o ViewHolder para os repositorios
-        //Exemplo:
-        //val atributo: TextView
+        var cardRepositorio : CardView
+        var nomeRepositorio : TextView
+        var botaoCompartilhar: ImageView
 
-        //init {
-        //    view.apply {
-        //        atributo = findViewById(R.id.item_view)
-        //    }
-
+        init {
+            view.apply {
+                cardRepositorio = findViewById(R.id.cv_repositorio)
+                nomeRepositorio = findViewById(R.id.tv_nome_repositorio)
+                botaoCompartilhar = findViewById(R.id.iv_compartilhar)
+            }
+        }
     }
 }
