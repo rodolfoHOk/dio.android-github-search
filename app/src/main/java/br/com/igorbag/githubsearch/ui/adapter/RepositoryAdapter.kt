@@ -13,7 +13,7 @@ import br.com.igorbag.githubsearch.domain.Repository
 class RepositoryAdapter(private val repositories: List<Repository>) :
     RecyclerView.Adapter<RepositoryAdapter.ViewHolder>() {
 
-    var carItemLister: (Repository) -> Unit = {}
+    var repositorioItemLister: (Repository) -> Unit = {}
     var btnShareLister: (Repository) -> Unit = {}
 
     // Cria uma nova view
@@ -25,19 +25,15 @@ class RepositoryAdapter(private val repositories: List<Repository>) :
 
     // Pega o conteudo da view e troca pela informacao de item de uma lista
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        //@TODO 8 -  Realizar o bind do viewHolder
-        //Exemplo de Bind
-        //  holder.preco.text = repositories[position].atributo
+        holder.nomeRepositorio.text = repositories[position].name
 
-        // Exemplo de click no item
-        //holder.itemView.setOnClickListener {
-        // carItemLister(repositores[position])
-        //}
+        holder.cardRepositorio.setOnClickListener {
+            repositorioItemLister(repositories[position])
+        }
 
-        // Exemplo de click no btn Share
-        //holder.favorito.setOnClickListener {
-        //    btnShareLister(repositores[position])
-        //}
+        holder.botaoCompartilhar.setOnClickListener {
+            btnShareLister(repositories[position])
+        }
     }
 
     // Pega a quantidade de repositorios da lista
