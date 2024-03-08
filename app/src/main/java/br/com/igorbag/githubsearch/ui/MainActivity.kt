@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.igorbag.githubsearch.R
 import br.com.igorbag.githubsearch.data.GitHubService
 import br.com.igorbag.githubsearch.domain.Repository
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Metodo responsavel por realizar o setup da view e recuperar os Ids do layout
-    fun setupView() {
+    private fun setupView() {
         nomeUsuario = findViewById(R.id.et_nome_usuario)
         btnConfirmar = findViewById(R.id.btn_confirmar)
         listaRepositories = findViewById(R.id.rv_lista_repositories)
@@ -61,13 +63,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     //Metodo responsavel por fazer a configuracao base do Retrofit
-    fun setupRetrofit() {
-        /*
-           @TODO 5 -  realizar a Configuracao base do retrofit
-           Documentacao oficial do retrofit - https://square.github.io/retrofit/
-           URL_BASE da API do  GitHub= https://api.github.com/
-           lembre-se de utilizar o GsonConverterFactory mostrado no curso
-        */
+    private fun setupRetrofit() {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.github.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        githubApi = retrofit.create(GitHubService::class.java)
     }
 
     //Metodo responsavel por buscar todos os repositorios do usuario fornecido
