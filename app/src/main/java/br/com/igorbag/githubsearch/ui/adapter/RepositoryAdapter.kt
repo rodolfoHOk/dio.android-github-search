@@ -37,8 +37,7 @@ class RepositoryAdapter(private val repositories: List<Repository>) :
     }
 
     // Pega a quantidade de repositorios da lista
-    //@TODO 9 - realizar a contagem da lista
-    override fun getItemCount(): Int = 0
+    override fun getItemCount(): Int = repositories.size
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var cardRepositorio : CardView
