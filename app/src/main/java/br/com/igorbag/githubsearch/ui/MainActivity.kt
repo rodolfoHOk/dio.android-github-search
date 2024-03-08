@@ -44,7 +44,12 @@ class MainActivity : AppCompatActivity() {
 
     // salvar o usuario preenchido no EditText utilizando uma SharedPreferences
     private fun saveUserLocal() {
-        //@TODO 3 - Persistir o usuario preenchido na editText com a SharedPref no listener do botao salvar
+        val nomeUsuarioDigitado = nomeUsuario.text.toString()
+        val sharedPref = getPreferences(MODE_PRIVATE) ?: return
+        with(sharedPref.edit()) {
+            putString(getString(R.string.shared_pref_nome_usuario), nomeUsuarioDigitado)
+            apply()
+        }
     }
 
     private fun showUserName() {
