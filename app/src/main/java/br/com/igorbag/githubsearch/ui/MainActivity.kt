@@ -51,11 +51,21 @@ class MainActivity : AppCompatActivity() {
 
     // salvar o usuario preenchido no EditText utilizando uma SharedPreferences
     private fun saveUserLocal() {
-        val nomeUsuarioDigitado = nomeUsuario.text.toString()
-        val sharedPref = getPreferences(MODE_PRIVATE) ?: return
-        with(sharedPref.edit()) {
-            putString(getString(R.string.shared_pref_nome_usuario), nomeUsuarioDigitado)
-            apply()
+        val nomeUsuarioDigitado = nomeUsuario.text.toString().trim()
+        if (nomeUsuarioDigitado.isNotEmpty()) {
+            val sharedPref = getPreferences(MODE_PRIVATE) ?: return
+            with(sharedPref.edit()) {
+                putString(getString(R.string.shared_pref_nome_usuario), nomeUsuarioDigitado)
+                apply()
+            }
+            getAllReposByUserName()
+        } else {
+            val sharedPref = getPreferences(MODE_PRIVATE) ?: return
+            with(sharedPref.edit()) {
+                remove(getString(R.string.shared_pref_nome_usuario))
+                apply()
+            }
+            setupAdapter(arrayListOf())
         }
     }
 
@@ -78,34 +88,39 @@ class MainActivity : AppCompatActivity() {
 
     //Metodo responsavel por buscar todos os repositorios do usuario fornecido
     private fun getAllReposByUserName() {
-        githubApi.getAllRepositoriesByUser(nomeUsuario.text.toString()).enqueue(object : Callback<List<Repository>> {
-            override fun onResponse(
-                call: Call<List<Repository>>,
-                response: Response<List<Repository>>
-            ) {
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        setupAdapter(it)
+        if (nomeUsuario.text.toString().trim().isNotEmpty()) {
+            githubApi.getAllRepositoriesByUser(nomeUsuario.text.toString())
+                .enqueue(object : Callback<List<Repository>> {
+                    override fun onResponse(
+                        call: Call<List<Repository>>,
+                        response: Response<List<Repository>>
+                    ) {
+                        if (response.isSuccessful) {
+                            response.body()?.let {
+                                setupAdapter(it)
+                            }
+                        } else {
+                            Toast
+                                .makeText(
+                                    applicationContext,
+                                    "Erro ao tentar buscar repositórios do usuário",
+                                    Toast.LENGTH_LONG
+                                )
+                                .show()
+                        }
                     }
-                } else {
-                    Toast
-                        .makeText(
-                            applicationContext,
-                            "Erro ao tentar buscar repositórios do usuário",
-                            Toast.LENGTH_LONG)
-                        .show()
-                }
-            }
 
-            override fun onFailure(call: Call<List<Repository>>, t: Throwable) {
-                Toast
-                    .makeText(
-                        applicationContext,
-                        "Erro ao tentar buscar repositórios do usuário",
-                        Toast.LENGTH_LONG)
-                    .show()
-            }
-        })
+                    override fun onFailure(call: Call<List<Repository>>, t: Throwable) {
+                        Toast
+                            .makeText(
+                                applicationContext,
+                                "Erro ao tentar buscar repositórios do usuário",
+                                Toast.LENGTH_LONG
+                            )
+                            .show()
+                    }
+                })
+        }
     }
 
     // Metodo responsavel por realizar a configuracao do adapter
